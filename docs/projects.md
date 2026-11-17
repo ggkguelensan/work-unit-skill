@@ -50,6 +50,8 @@ A project root may contain independent repositories without being a repository i
 - Derive setup, build, test, and hooks from each repository. Run them in that repository or its selected worktree.
 - Keep source and deployment-config repositories distinct. Track their branches, checks, and MRs separately.
 
+For Claude Code and Codex, use the [shared-source convention](agents.md): one instruction source, one skill source, and small native adapters.
+
 ## Start or resume work
 
 1. Select the owning project root; locate its work unit using a task, title, MR, session, branch, or path.

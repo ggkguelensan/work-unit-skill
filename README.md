@@ -15,23 +15,23 @@ git clone https://github.com/ggkguelensan/work-unit-skill.git \
   "$HOME/Projects/work-unit-skill"
 ```
 
-For Codex, link the skill into its discovery directory:
+Register one shared skill source. Codex discovers user skills here:
 
 ```sh
-mkdir -p "$HOME/.codex/skills"
+mkdir -p "$HOME/.agents/skills"
 ln -s "$HOME/Projects/work-unit-skill/skills/work-unit" \
-  "$HOME/.codex/skills/work-unit"
+  "$HOME/.agents/skills/work-unit"
 ```
 
-For Claude Code, use the same source:
+Connect Claude Code to that source:
 
 ```sh
 mkdir -p "$HOME/.claude/skills"
-ln -s "$HOME/Projects/work-unit-skill/skills/work-unit" \
+ln -s "$HOME/.agents/skills/work-unit" \
   "$HOME/.claude/skills/work-unit"
 ```
 
-If an entry already exists, inspect it before replacing it. Start a new agent session and invoke `work-unit`, or let the harness select it for relevant work. Discovery behavior depends on the harness.
+If an entry already exists, inspect it before replacing it. Avoid duplicate registrations in directories scanned by the same harness. Start a new agent session and invoke `work-unit`, or let the harness select it for relevant work. See [Claude Code and Codex](docs/agents.md) for discovery paths and instruction adapters.
 
 ## Use
 
@@ -48,6 +48,7 @@ Agents recover context before choosing a checkout, verify links through the rele
 
 - [Skill instructions](skills/work-unit/SKILL.md)
 - [Projects: layout and workflow](docs/projects.md)
+- [Claude Code and Codex: shared sources and native adapters](docs/agents.md)
 - [JSON Schema](skills/work-unit/references/work-unit.schema.json)
 - [Synthetic work-unit example](docs/resources/work-unit.example.json)
 
