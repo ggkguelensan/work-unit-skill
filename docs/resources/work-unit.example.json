@@ -1,0 +1,82 @@
+{
+  "schema_version": 4,
+  "id": "81f75c6a-6939-4b38-8ed6-0946a9c8b72d",
+  "name": "Event ticket lists",
+  "emojis": [
+    "🦊",
+    "🍋",
+    "🪁",
+    "🪐"
+  ],
+  "goal": "Show primary and resale tickets in the event card.",
+  "description": "Coordinate ticket-list presentation across the frontend and API.",
+  "dod": [
+    "Primary and resale lists match the agreed design.",
+    "The API and frontend handle events with multiple venues.",
+    "Required checks pass in each affected repository."
+  ],
+  "references": [
+    {
+      "label": "Design brief (fictional)",
+      "target": "https://example.com/design/event-tickets"
+    },
+    {
+      "label": "Project notes (fictional)",
+      "target": "/home/example/Projects/example/.agents/docs/event-tickets.md"
+    }
+  ],
+  "participants": [
+    {
+      "tool": "codex",
+      "kind": "session",
+      "id": "example-session-id",
+      "role": "Frontend implementation",
+      "last_seen_at": "2026-01-01T10:00:00Z"
+    },
+    {
+      "tool": "claude-code",
+      "kind": "agent",
+      "id": "example-agent-id",
+      "role": "API implementation",
+      "last_seen_at": "2026-01-01T10:00:00Z"
+    }
+  ],
+  "asana": [
+    {
+      "task_gid": "1000000000000001",
+      "url": "https://app.asana.com/0/0/1000000000000001",
+      "key": "DEMO-42",
+      "verified_at": "2026-01-01T10:00:00Z"
+    },
+    {
+      "task_gid": "1000000000000002",
+      "url": "https://app.asana.com/0/0/1000000000000002",
+      "key": "DEMO-43",
+      "verified_at": "2026-01-01T10:00:00Z"
+    }
+  ],
+  "implementations": [
+    {
+      "repository_url": "git@gitlab.example.com:example/frontend/web.git",
+      "branch": "feat/demo-42-ticket-lists",
+      "worktree_paths": [
+        "/home/example/Projects/example/worktrees/example/frontend/web/feat-demo-42-ticket-lists"
+      ],
+      "merge_request_urls": [
+        "https://gitlab.example.com/example/frontend/web/-/merge_requests/42"
+      ],
+      "verified_at": "2026-01-01T10:00:00Z"
+    },
+    {
+      "repository_url": "git@gitlab.example.com:example/backend/events.git",
+      "branch": "feat/demo-43-venues",
+      "worktree_paths": [
+        "/home/example/Projects/example/worktrees/example/backend/events/feat-demo-43-venues"
+      ],
+      "merge_request_urls": [
+        "https://gitlab.example.com/example/backend/events/-/merge_requests/43"
+      ],
+      "verified_at": "2026-01-01T10:00:00Z"
+    }
+  ]
+}
