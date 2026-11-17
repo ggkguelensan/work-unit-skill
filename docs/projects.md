@@ -1,72 +1,50 @@
 # Projects
 
-Keep each project's repositories, worktrees, instructions, settings, and work-unit records under its own `~/Projects/<project-name>/` root.
+For organizing independent projects under `~/Projects/<project-name>/`.
 
 ## Layout
 
-Illustrative layout; create directories only when needed:
+Illustrative tree; create only needed directories and preserve existing layouts:
 
 ```text
-~/Projects/
-├── example/
-│   ├── AGENTS.md
-│   ├── CLAUDE.md
-│   ├── .agents/
-│   │   ├── docs/
-│   │   ├── skills/
-│   │   ├── scripts/
-│   │   └── work-units/<uuid>.json
-│   ├── .config/worktrunk.toml
-│   ├── project-settings/
-│   ├── repos/<owner>/<repository>/
-│   └── worktrees/<owner>/<repository>/<branch>/
-└── another-project/
-    ├── .agents/work-units/
-    └── repos/
+~/Projects/<project-name>/
+├── AGENTS.md
+├── CLAUDE.md
+├── .agents/
+│   ├── docs/
+│   ├── skills/
+│   ├── scripts/
+│   └── work-units/<uuid>.json
+├── .config/worktrunk.toml
+├── project-settings/
+├── repos/<owner>/<repository>/
+└── worktrees/<owner>/<repository>/<branch>/
 ```
 
-| Location | Owns |
-| --- | --- |
-| `AGENTS.md` | Project entry point: repository selection, baseline branches, links to scoped instructions |
-| `CLAUDE.md` | Native import of the same project instructions when required |
-| `.agents/docs/` | Project architecture and procedures |
-| `.agents/skills/` | Project-specific skills |
-| `.agents/scripts/` | Shared project helpers |
-| `.agents/work-units/` | Local records spanning the project's repositories and sessions |
-| `.config/` | Tool-native configuration, including workspace Worktrunk settings |
-| `project-settings/` | Optional project-owned settings that have no existing native owner |
-| `repos/` | Primary checkouts, preserving forge namespaces |
-| `worktrees/` | Isolated checkouts managed by Worktrunk |
+- `AGENTS.md`: project entry point, repository selection, baselines, and scoped document routes.
+- `.agents/`: project guidance, skills, helpers, and local work records.
+- `.config/`: native tool settings. Use optional `project-settings/` only for settings without an existing owner; the skill does not parse it.
+- `repos/` and `worktrees/`: preserve forge namespaces. A project may contain independent repositories or be a single checkout itself.
+- Credentials: use each tool's supported credential store.
 
-Use existing native config files as their source of truth. `project-settings/` is an optional directory convention, not a manifest parsed by this skill. Keep credentials in the relevant tool's supported credential store.
+Ticketon keeps primary checkouts in `ticketon-fho/`; this convention does not require moving them.
 
-A project root may contain independent repositories without being a repository itself. A single-repository project may use the root as its checkout. Preserve existing layouts: for example, Ticketon keeps primary checkouts under `ticketon-fho/` rather than `repos/`.
+## Repository work
 
-## Instructions and settings
+- Keep personal defaults in user configuration and project facts in project instructions.
+- Load owning workspace instructions explicitly from nested repositories/worktrees; apply repository/subtree guidance within its checkout.
+- Before edits, check physical path, Git status, branch, worktrees, and applicable instructions.
+- Select the task/project baseline; the forge default branch may differ. Ticketon workspace analysis prefers `dev` where available.
+- Derive setup, tests, and hooks per repository; run them in its selected checkout.
+- Track source and deployment-config repositories separately, including branches, MRs, and checks.
 
-- Put personal defaults and reusable skills in the user's agent configuration; keep project facts in the project's instructions.
-- Route from `AGENTS.md` to detailed documents by reading condition. Connect native agent entry points to that source instead of maintaining copies.
-- Load workspace instructions explicitly when entering a nested repository or worktree. Keep repository/subtree instructions and native tool configuration scoped to their checkout.
-- Derive setup, build, test, and hooks from each repository. Run them in that repository or its selected worktree.
-- Keep source and deployment-config repositories distinct. Track their branches, checks, and MRs separately.
+For native instruction and skill connections, read [Agents](agents.md).
 
-For Claude Code and Codex, use the [shared-source convention](agents.md): one instruction source, one skill source, and small native adapters.
+## Worktrees
 
-## Start or resume work
-
-1. Select the owning project root; locate its work unit using a task, title, MR, session, branch, or path.
-2. Read its goal, description, DoD, references, and participants. Confirm relevant links with the services and local checkouts.
-3. Identify each target repository. Check its physical path, Git status, branch, worktrees, and instructions before changes.
-4. Reuse a suitable worktree or create one with `wt` from the project's selected baseline. Use Worktrunk's reported path.
-5. Work and validate per repository. Update implementation links, scope, and participant observations in the project record as they change.
-
-Use the required baseline from project instructions or the task; the forge's default branch alone does not establish the development baseline. For workspace-wide Ticketon analysis, `dev` is preferred where available; other projects define their own baseline.
-
-## Worktrunk
-
-Use the effective path configuration rather than constructing worktree paths manually. Preserve owner/subgroup namespaces so similarly named repositories stay separate.
-
-When a project provides an explicit workspace config:
+- Reuse a suitable worktree; otherwise create it with `wt`.
+- Use effective Worktrunk configuration and its reported path.
+- When a workspace provides `.config/worktrunk.toml`, pass it explicitly:
 
 ```sh
 wt --config "$project_root/.config/worktrunk.toml" -C "$repo_root" list
@@ -74,18 +52,9 @@ wt --config "$project_root/.config/worktrunk.toml" -C "$repo_root" \
   switch --create "$branch"
 ```
 
-Ticketon uses this explicit config pattern. Its repository lifecycle hooks live in each repository's `.config/wt.toml`. These are different scopes; a workspace path convention does not define every repository's setup commands.
+- Keep lifecycle hooks in each repository's `.config/wt.toml`; workspace path settings have a different scope.
+- Before removal, check dirty/untracked files, unpreserved commits, and MR state. Session completion alone does not make a worktree disposable.
 
-Before removing a worktree, check dirty/untracked files, unpreserved commits, and the associated MR. A finished session does not establish that its worktree is disposable.
+## Work units
 
-## Work-unit records
-
-Use the [work-unit skill](../skills/work-unit/SKILL.md) for the record schema and read/write procedures. Units belong to their project root even when work spans several nested repositories or checkouts.
-
-The visual title is four emoji followed by the working name. Use it where title conventions permit; use the UUID for durable identity. Store supplied agent/session IDs with their tool name, and treat last-seen timestamps as observations.
-
-Delivery status remains in Asana/GitLab. Local records retain the unit's purpose, DoD, resources, participants, and verified implementation links. Project membership alone does not link unrelated tasks.
-
-Keep live records out of source commits. In a repository-backed project root, add `/.agents/work-units/` to that repository's local Git exclude file; in a linked worktree, locate it with `git rev-parse --git-path info/exclude`. Synthetic examples may be versioned separately.
-
-See the [example record](resources/work-unit.example.json); its tasks, paths, MRs, and session IDs are fictional.
+Use the [skill](../skills/work-unit/SKILL.md) for recovery and persistence across all project checkouts. Its [example](resources/work-unit.example.json) is fictional; live records stay local.
